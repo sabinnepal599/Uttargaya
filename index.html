@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uttargaya Geohazard Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <!--Marker Cluster-->
+    <link rel="stylesheet" href="./dist/MarkerCluster.css">
+    <link rel="stylesheet" href="./dist/MarkerCluster.Default.css">
+    <link rel="stylesheet" href="./leaflet.legend.css">
+    <style>
+        #map {
+            height: 100vh;
+            width: 100%;
+        }
+
+        .info {
+            padding: 6px 8px;
+            font: 14px/16px Arial, Helvetica, sans-serif;
+            background: white;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+        }
+
+        .info h4 {
+            margin: 0 0 5px;
+            color: #777;
+        }
+
+        .legend {
+            line-height: 12px;
+            color: #555;
+        }
+
+        .legend i {
+            width: 12px;
+            height: 12px;
+            float: left;
+            margin-right: 4px;
+            opacity: 0.7;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="map"></div>
+</body>
+
+</html>
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script src="./data/PD_yes_SSA_yes.geojson"></script>
+<script src="./data/Uttargaya_boundary.geojson"></script>
+<script src="./data/PD_yes_SSA_yes.js"></script>
+<script src="./data/Uttargaya_boundary.js"></script>
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+<script src="./data/Other_SSA.geojson"></script>
+<script src="./data/Evacuationassembly_points.geojson"></script>
+<script src="./data/Evacuationassembly_points.js"></script>
+<script src="./data/Risk_zones.geojson"></script>
+<script src="./data/Risk_zones.js"></script>
+<script src="./data/CatII.geojson"></script>
+<script src="./data/CatII.js"></script>
+<script src="./data/FootTrail.geojson"></script>
+<script src="./data/FootTrail.js"></script>
+<script src="./data/CatIII.geojson"></script>
+<script src="./data/CatIII.js"></script>
+<script src="./data/Road.geojson"></script>
+<script src="./data/Road.js"></script>
+<script src="./data/Other_SSA.js"></script>
+<script src="./dist/leaflet.markercluster.js"></script>
+<script src="./leaflet.legend.js"></script>
+
+
+
+
+
+<script>
+
+    /*===================================================
+                      OSM  LAYER               
+===================================================*/
+
+    var map = L.map('map').setView([28.0167, 85.2136], 11);
+
+    var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    });
+    osm.addTo(map);
+
+    /*===================================================
+                          MARKER               
+    ===================================================*/
+
+
+    /*===================================================
+                         TILE LAYER               
+    ===================================================*/
+
+    var CartoDB_DarkMatter = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 19,
+    });
+    CartoDB_DarkMatter.addTo(map);
+
+    // Google Map Layer
+
+    googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+        maxZoom: 20,
+        subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+    });
+    googleStreets.addTo(map);
+
+    // Satelite Layer
+    googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+        maxZoom: 20,
+        subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+    });
+    googleSat.addTo(map);
+
+
+
+
+
+
+
+
+    /*==============================================
+                            MARKER
+        ================================================*/
+    var redicon = L.icon({
+        iconUrl: 'data/redicon.svg',
+        iconSize: [40, 40],
+        iconAnchor: [0, 0],
+    });
+
+    var homeicon = L.icon({
+        iconUrl: 'data/homeicon.svg',
+        iconSize: [40, 40],
+        iconAnchor: [0, 0],
+    });
+    var evacuation_assembly = L.icon({
+        iconUrl: 'data/evacuation_assembly.svg',
+        iconSize: [40, 40],
+        iconAnchor: [0, 0],
+    });
+
+    var catIII_icon = L.icon({
+        iconUrl: 'data/catIII.svg',
+        iconSize: [20, 20],
+        iconAnchor: [0, 0],
+    });
+
+    var catII_icon = L.icon({
+        iconUrl: 'data/catII.svg',
+        iconSize: [20, 20],
+        iconAnchor: [0, 0],
+    });
+
+    /*===================================================
+                      GEOJSON               
+===================================================*/
+
+    //var Uttargaya = L.geoJSON(Uttargaya).addTo(map);
+    var Uttargaya_Boundary= L.geoJSON(Uttargaya_boundary, {
+        color: "red",
+        fillOpacity: 0,
+    }).addTo(map);
+
+
+    //risk zones polygon:
+    var Risk_Zone = L.geoJSON(Risk_zones, {
+        fillColor: "#820d0d",
+        fillOpacity: 0.5,
+    }).addTo(map);
+
+
+
+    //Roads
+     var RoadWay = L.geoJSON(Road, {
+        color: "brown",
+        fillOpacity: 0.5,
+        outerWidth:0.7,
+    }).addTo(map);
+
+    var Foottrail = L.geoJSON(FootTrail, {
+        color: "yellow",
+        fillOpacity: 0.5,
+        outerWidth:0.7,
+    }).addTo(map);
+
+
+
+///POint data------------------///
+
+//cat III
+var catIII = L.geoJSON(CatIII, {
+        pointToLayer: function (feature, latlng) {
+            return L.marker(latlng, { icon: catIII_icon });
+        },
+        onEachFeature: function (feature, latlng) {
+            latlng.bindPopup('<b> CAT: </b>' + feature.properties.Category + '<br>'
+                + '<b> Settlement Name: </b>' + feature.properties.Village_To + '<br>'
+                + '<b> Total HHs: </b>' + feature.properties.Total_HHs + '<br>');
+        }
+    });
+map.addLayer(catIII);
+
+//cat II
+var catII = L.geoJSON(CatII, {
+        pointToLayer: function (feature, latlng) {
+            return L.marker(latlng, { icon: catII_icon });
+        },
+        onEachFeature: function (feature, latlng) {
+            latlng.bindPopup('<b> CAT: </b>' + feature.properties.Category + '<br>'
+                + '<b> Settlement Name: </b>' + feature.properties.Village_To + '<br>'
+                + '<b> Total HHs: </b>' + feature.properties.Total_HHs + '<br>');
+        }
+    });
+map.addLayer(catII);
+
+
+//evacuation_assembly_point
+
+var Evacuationassembly_Point = L.geoJSON(Evacuationassembly_points, {
+        pointToLayer: function (feature, latlng) {
+            return L.marker(latlng, { icon: evacuation_assembly });
+        },
+        onEachFeature: function (feature, latlng) {
+            latlng.bindPopup('<b> Name: </b>' + feature.properties.Name_Eng + '<br>'
+                + '<b> Area (in sq. m): </b>' + feature.properties.Area_sq_m + '<br>'
+                + '<b> Capacity (person): </b>' + feature.properties.Capacity + '<br>');
+        }
+    });
+map.addLayer(Evacuationassembly_Point);
+
+
+    //----------------PD and SSA HHs------------------------//
+    var pd_yes_ssa_yes = L.geoJSON(PD_yes_SSA_yes, {
+        pointToLayer: function (feature, latlng) {
+            return L.marker(latlng, { icon: redicon });
+        },
+        onEachFeature: function (feature, latlng) {
+            latlng.bindPopup('<b> CAT: </b>' + feature.properties.CAT + '<br>'
+                + '<b> Respondent: </b>' + feature.properties.Respondent + '<br>'
+                + '<b> Ward Number: </b>' + feature.properties.Ward + '<br>'
+                + '<b> Anyone Disabled?: </b>' + feature.properties.Anyone_Dis + '<br>'
+                + '<b> Receive SSA?: </b>' + feature.properties.Receive_SS + '<br>'
+                + '<b> Settlement: </b>' + feature.properties.Settlement + '<br>');
+        }
+    });
+    const markers1 = L.markerClusterGroup().addLayer(pd_yes_ssa_yes);
+    map.addLayer(markers1);
+
+    //-------------------------------Other SSA-----------------------------//
+    var other_ssa = L.geoJSON(Other_SSA, {
+        pointToLayer: function (feature, latlng) {
+            return L.marker(latlng, { icon: homeicon });
+        },
+        onEachFeature: function (feature, latlng) {
+            latlng.bindPopup('<b> CAT: </b>' + feature.properties.CAT + '<br>'
+                + '<b> Respondent: </b>' + feature.properties.Respondent + '<br>'
+                + '<b> Ward Number: </b>' + feature.properties.Ward + '<br>'
+                + '<b> Anyone Disabled?: </b>' + feature.properties.Anyone_Dis + '<br>'
+                + '<b> Receive SSA?: </b>' + feature.properties.Receive_SS + '<br>'
+                + '<b> Settlement: </b>' + feature.properties.Settlement + '<br>');
+        }
+    });
+    const markers = L.markerClusterGroup().addLayer(other_ssa);
+    map.addLayer(markers);
+
+
+
+
+    /*===================================================
+                        Legend               
+  ===================================================*/
+    const legend = L.control.Legend({
+        position: "bottomleft",
+        collapsed: false,
+        symbolWidth: 24,
+        opacity: 1,
+        column: 1,
+        legends: [{
+            label: "HHs with PWD receiving SSA",
+            type: "image",
+            url: "data/redicon.svg",
+        }, {
+            label: "HHs receiving other SSA",
+            type: "image",
+            url: "data/homeicon.svg"
+        }, {
+            label: "Uttargaya Boundary",
+            type: "polyline",
+            color: "red",
+            fillColor: "#FF0000",
+            weight: 3,
+            layers: Uttargaya_Boundary
+        },{
+            label: "Road Way",
+            type: "polyline",
+            color: "brown",
+            fillColor: "#FF0000",
+            weight: 2,
+            layers: RoadWay
+        },
+        {
+            label: "Foot Trail",
+            type: "polyline",
+            color: "yellow",
+            fillColor: "#FF0000",
+            weight: 2,
+            layers: Foottrail
+        }, {
+            label: "CAT III Settlement",
+            type: "image",
+            url: "data/catIII.svg"
+        }, {
+            label: "CAT II Settlement",
+            type: "image",
+            url: "data/catII.svg"
+        }, {
+            label: "Emergency Assembly Point",
+            type: "image",
+            url: "data/evacuation_assembly.svg"
+        }, {
+            label: "Risk Zones",
+            type: "polygon",
+            fillColor: "#820d0d",
+            weight: 1,
+            layers: Risk_Zone
+        }
+    
+    
+    
+    ]
+    })
+        .addTo(map);
+
+    /*===================================================
+                          LAYER CONTROL               
+    ===================================================*/
+
+    var overlays = {
+        "Uttargaya Boundary": Uttargaya_Boundary,
+        "HHs with PWD receiving SSA": pd_yes_ssa_yes,
+        "HHs receiving other SSA": other_ssa,
+        "CAT III Settlement":catIII,
+        "CAT II Settlement":catII,
+        "Risk Zones":Risk_Zone,
+        "Evacuation Assembly Point":Evacuationassembly_Point,
+    };
+
+    var baseLayers = {
+        "Satellite": googleSat,
+        "Google Map": googleStreets,
+        "OpenStreetMap": osm,
+    };
+
+
+
+    L.control.layers(baseLayers, overlays).addTo(map);
+
+
+    /*===================================================
+                          SEARCH BUTTON               
+    ===================================================*/
+
+
+
+
+    L.Control.geocoder().addTo(map);
+
+
+
+</script>
