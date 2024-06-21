@@ -65,6 +65,14 @@
 <script src="./data/Evacuationassembly_points.js"></script>
 <script src="./data/Risk_zones.geojson"></script>
 <script src="./data/Risk_zones.js"></script>
+<script src="./data/education.geojson"></script>
+<script src="./data/education.js"></script>
+<script src="./data/government.geojson"></script>
+<script src="./data/government.js"></script>
+<script src="./data/health.geojson"></script>
+<script src="./data/health.js"></script>
+<script src="./data/security.geojson"></script>
+<script src="./data/security.js"></script>
 <script src="./data/CatII.geojson"></script>
 <script src="./data/CatII.js"></script>
 <script src="./data/FootTrail.geojson"></script>
@@ -143,6 +151,26 @@
 
     var homeicon = L.icon({
         iconUrl: 'data/homeicon.svg',
+        iconSize: [40, 40],
+        iconAnchor: [0, 0],
+    });
+    var school_icon = L.icon({
+        iconUrl: 'data/school_icon.svg',
+        iconSize: [40, 40],
+        iconAnchor: [0, 0],
+    });
+    var hospital_icon = L.icon({
+        iconUrl: 'data/hospital_icon.svg',
+        iconSize: [40, 40],
+        iconAnchor: [0, 0],
+    });
+    var government_icon = L.icon({
+        iconUrl: 'data/government_icon.svg',
+        iconSize: [40, 40],
+        iconAnchor: [0, 0],
+    });
+    var security_icon = L.icon({
+        iconUrl: 'data/security_icon.svg',
         iconSize: [40, 40],
         iconAnchor: [0, 0],
     });
@@ -226,6 +254,53 @@ var catII = L.geoJSON(CatII, {
     });
 map.addLayer(catII);
 
+//Education Institutions
+var Education = L.geoJSON(education, {
+        pointToLayer: function (feature, latlng) {
+            return L.marker(latlng, { icon: school_icon });
+        },
+        onEachFeature: function (feature, latlng) {
+            latlng.bindPopup('<b> Name: </b>' + feature.properties.Name + '<br>'
+                + '<b> Ward No.: </b>' + feature.properties.Ward + '<br>');
+        }
+    });
+map.addLayer(Education);
+
+//Government Institutions
+var Government = L.geoJSON(government, {
+        pointToLayer: function (feature, latlng) {
+            return L.marker(latlng, { icon: government_icon });
+        },
+        onEachFeature: function (feature, latlng) {
+            latlng.bindPopup('<b> Name: </b>' + feature.properties.Name + '<br>'
+                + '<b> Ward No.: </b>' + feature.properties.Ward + '<br>');
+        }
+    });
+map.addLayer(Government);
+
+//Health Institutions
+var Health = L.geoJSON(health, {
+        pointToLayer: function (feature, latlng) {
+            return L.marker(latlng, { icon: hospital_icon });
+        },
+        onEachFeature: function (feature, latlng) {
+            latlng.bindPopup('<b> Name: </b>' + feature.properties.Name + '<br>'
+                + '<b> Ward No.: </b>' + feature.properties.Ward + '<br>');
+        }
+    });
+map.addLayer(Health);
+
+//Security Institutions
+var Security = L.geoJSON(security, {
+        pointToLayer: function (feature, latlng) {
+            return L.marker(latlng, { icon: security_icon });
+        },
+        onEachFeature: function (feature, latlng) {
+            latlng.bindPopup('<b> Name: </b>' + feature.properties.Name + '<br>'
+                + '<b> Ward No.: </b>' + feature.properties.Ward + '<br>');
+        }
+    });
+map.addLayer(Security);
 
 //evacuation_assembly_point
 
@@ -287,7 +362,7 @@ map.addLayer(Evacuationassembly_Point);
         collapsed: false,
         symbolWidth: 24,
         opacity: 1,
-        column: 1,
+        column: 2,
         legends: [{
             label: "HHs with PWD receiving SSA",
             type: "image",
@@ -318,6 +393,22 @@ map.addLayer(Evacuationassembly_Point);
             fillColor: "#FF0000",
             weight: 2,
             layers: Foottrail
+        },  {
+            label: "Educational Institutions",
+            type: "image",
+            url: "data/school_icon.svg"
+        },{
+            label: "Health Institutions",
+            type: "image",
+            url: "data/hospital_icon.svg"
+        }, {
+            label: "Government Offices",
+            type: "image",
+            url: "data/government_icon.svg"
+        }, {
+            label: "Security Institutions",
+            type: "image",
+            url: "data/security_icon.svg"
         }, {
             label: "CAT III Settlement",
             type: "image",
@@ -354,6 +445,10 @@ map.addLayer(Evacuationassembly_Point);
         "HHs receiving other SSA": other_ssa,
         "CAT III Settlement":catIII,
         "CAT II Settlement":catII,
+        "Educational Institutions": Education,
+        "Health Institutions": Health,
+        "Government Offices": Government,
+        "Security Institutions": Security,
         "Risk Zones":Risk_Zone,
         "Evacuation Assembly Point":Evacuationassembly_Point,
     };
