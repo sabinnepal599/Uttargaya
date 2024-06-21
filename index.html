@@ -231,7 +231,7 @@
 //cat III
 var catIII = L.geoJSON(CatIII, {
         pointToLayer: function (feature, latlng) {
-            return L.marker(latlng, { icon: catiii });
+            return L.marker(latlng, { icon: catIII_icon });
         },
         onEachFeature: function (feature, latlng) {
             latlng.bindPopup('<b> CAT: </b>' + feature.properties.Category + '<br>'
@@ -244,7 +244,7 @@ map.addLayer(catIII);
 //cat II
 var catII = L.geoJSON(CatII, {
         pointToLayer: function (feature, latlng) {
-            return L.marker(latlng, { icon: catii });
+            return L.marker(latlng, { icon: catII_icon });
         },
         onEachFeature: function (feature, latlng) {
             latlng.bindPopup('<b> CAT: </b>' + feature.properties.Category + '<br>'
