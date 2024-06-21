@@ -181,13 +181,13 @@
     });
 
     var catIII_icon = L.icon({
-        iconUrl: 'data/catIII.svg',
+        iconUrl: 'data/catiii.svg',
         iconSize: [20, 20],
         iconAnchor: [0, 0],
     });
 
     var catII_icon = L.icon({
-        iconUrl: 'data/catII.svg',
+        iconUrl: 'data/catii.svg',
         iconSize: [20, 20],
         iconAnchor: [0, 0],
     });
@@ -231,7 +231,7 @@
 //cat III
 var catIII = L.geoJSON(CatIII, {
         pointToLayer: function (feature, latlng) {
-            return L.marker(latlng, { icon: catIII_icon });
+            return L.marker(latlng, { icon: catiii });
         },
         onEachFeature: function (feature, latlng) {
             latlng.bindPopup('<b> CAT: </b>' + feature.properties.Category + '<br>'
@@ -244,7 +244,7 @@ map.addLayer(catIII);
 //cat II
 var catII = L.geoJSON(CatII, {
         pointToLayer: function (feature, latlng) {
-            return L.marker(latlng, { icon: catII_icon });
+            return L.marker(latlng, { icon: catii });
         },
         onEachFeature: function (feature, latlng) {
             latlng.bindPopup('<b> CAT: </b>' + feature.properties.Category + '<br>'
@@ -412,11 +412,11 @@ map.addLayer(Evacuationassembly_Point);
         }, {
             label: "CAT III Settlement",
             type: "image",
-            url: "data/catIII.svg"
+            url: "data/catiii.svg"
         }, {
             label: "CAT II Settlement",
             type: "image",
-            url: "data/catII.svg"
+            url: "data/catii.svg"
         }, {
             label: "Emergency Assembly Point",
             type: "image",
