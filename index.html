@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -182,13 +183,13 @@
 
     var catiii = L.icon({
         iconUrl: 'data/catiii.svg',
-        iconSize: [40, 40],
+        iconSize: [20, 20],
         iconAnchor: [0, 0],
     });
 
     var catii = L.icon({
         iconUrl: 'data/catii.svg',
-        iconSize: [40, 40],
+        iconSize: [20, 20],
         iconAnchor: [0, 0],
     });
 
@@ -204,7 +205,7 @@
 
 
     //risk zones polygon:
-     var Risk_Zone = L.geoJSON(Risk_zones, {
+    var Risk_Zone = L.geoJSON(Risk_zones, {
         fillColor: "blue",
         fillOpacity: 0.5,
     }).addTo(map);
@@ -240,7 +241,7 @@ var catIII = L.geoJSON(CatIII, {
         }
     });
 map.addLayer(catIII);
-    
+
 //cat II
 var catII = L.geoJSON(CatII, {
         pointToLayer: function (feature, latlng) {
