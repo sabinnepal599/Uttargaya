@@ -180,15 +180,15 @@
         iconAnchor: [0, 0],
     });
 
-    var catIII_icon = L.icon({
+    var catiii = L.icon({
         iconUrl: 'data/catiii.svg',
-        iconSize: [20, 20],
+        iconSize: [40, 40],
         iconAnchor: [0, 0],
     });
 
-    var catII_icon = L.icon({
+    var catii = L.icon({
         iconUrl: 'data/catii.svg',
-        iconSize: [20, 20],
+        iconSize: [40, 40],
         iconAnchor: [0, 0],
     });
 
@@ -205,7 +205,7 @@
 
     //risk zones polygon:
     var Risk_Zone = L.geoJSON(Risk_zones, {
-        fillColor: "#820d0d",
+        fillColor: "blue",
         fillOpacity: 0.5,
     }).addTo(map);
 
@@ -231,7 +231,7 @@
 //cat III
 var catIII = L.geoJSON(CatIII, {
         pointToLayer: function (feature, latlng) {
-            return L.marker(latlng, { icon: catIII_icon });
+            return L.marker(latlng, { icon: catiii });
         },
         onEachFeature: function (feature, latlng) {
             latlng.bindPopup('<b> CAT: </b>' + feature.properties.Category + '<br>'
@@ -240,11 +240,11 @@ var catIII = L.geoJSON(CatIII, {
         }
     });
 map.addLayer(catIII);
-
+    
 //cat II
 var catII = L.geoJSON(CatII, {
         pointToLayer: function (feature, latlng) {
-            return L.marker(latlng, { icon: catII_icon });
+            return L.marker(latlng, { icon: catii });
         },
         onEachFeature: function (feature, latlng) {
             latlng.bindPopup('<b> CAT: </b>' + feature.properties.Category + '<br>'
